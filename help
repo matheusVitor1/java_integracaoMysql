@@ -1,0 +1,39 @@
+    public void insereSalario(Connection con, int socio, String mes_ref) {
+
+
+        try {
+            
+            String sql2 = "select pr.valor_produto from produto pr, pedido pe, contas_receber c"
+                    + "where c.id_pedido = pe.id_pedido and pr.id_produto = pe.id_produto and pe.data_pedido like \"%08/2022%\"";
+            PreparedStatement pstm2 = con.prepareStatement(sql2);
+
+            ResultSet result2 = pstm2.executeQuery();
+
+            //valida resultado
+            while (result2.next()) {
+                double entrada = result2.getDouble(1);
+            }    
+                String sql1 = "select  SUM(aluguel + luz + internet + telefonia + tributos) as total from contas_pagar where mes_ref like \"%08/2022%\"";                
+            
+                PreparedStatement pstm1 = con.prepareStatement(sql1);
+
+                ResultSet result = pstm1.executeQuery();
+
+                //valida resultado
+                while (result.next()) {
+                    double saida = result.getDouble(1);
+                }
+                double salario = (result.entrada-result2.saida);
+                
+                String sql = "INSERT INTO salario(id_salario, id_socio, salario, mes_ref_salario)" + "VALUES(null,?,?,?)";
+                PreparedStatement pstm = con.prepareStatement(sql);
+
+                pstm.setInt(1, socio);
+                pstm.setDouble(2, salario);
+                pstm.setString(3, mes_ref);
+                pstm.execute();
+
+            }catch (Exception e) {
+            System.out.println("Erro ao inserir!" + e);
+        }
+    }
